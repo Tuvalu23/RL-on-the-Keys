@@ -1,5 +1,4 @@
 public class Car {
-  String name;
   PVector position;
   PVector velocity;
   PVector acceleration;
@@ -9,8 +8,7 @@ public class Car {
   float size = 30; // size of the car
   int mode; // left or right keys
   
-  Car(String n, color c, float x, float y, int mode) {
-    name = n;
+  Car(color c, float x, float y, int mode) {
     carColor = c;
     position = new PVector(x, y);
     velocity = new PVector(0, 0);
@@ -25,7 +23,7 @@ public class Car {
       rotate(-radians(1));
     }
     else{
-      car.rotate(radians(1));
+      //car.rotate(radians(1));
     }
   }
   
