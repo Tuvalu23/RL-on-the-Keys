@@ -9,6 +9,7 @@ public class Ball {
     location = new PVector(x, y); // x,y should be the center of the field, or the top of the field so the ball drops down
     velocity = new PVector(0, 0);
     acceleration = new PVector(0,0);
+    display();
   }
   
   void move(){

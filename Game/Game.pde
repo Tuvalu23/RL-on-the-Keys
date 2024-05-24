@@ -86,6 +86,7 @@ void displayOpeningScreen() {
 }
 
 void drawField() {
+  
 }
 
 void startGame() {
