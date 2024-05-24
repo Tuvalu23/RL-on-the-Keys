@@ -21,15 +21,28 @@ void draw() {
   }
   else {
     background(255);
-    //createField();
+    drawField();
     //update();
   }
 }
 
 void mousePressed() {
-  if (!gameStarted && mouseX > width/2 - 300 && mouseX < width/2 + 300 && mouseY > height/2 - 150 && mouseY < height/2 + 150) { // check if start button has been pressed 
-    startGame();
-  }
+  // checks if play button is pressed
+  if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 100 && mouseY < height/2 - 50) { 
+      startGame();
+    }
+    // checks if credits is pressed
+    else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 25 && mouseY < height/2 + 25) { 
+      // credits();
+    }
+    // check if settings is pressed
+    else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 + 50 && mouseY < height/2 + 100) { 
+      // settings();
+    }
+    // check if exit is pressded
+    else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 + 125 && mouseY < height/2 + 175) { 
+      exit(); // quit
+    }
 }
 
 void displayOpeningScreen() {
@@ -39,17 +52,42 @@ void displayOpeningScreen() {
   fill(0); // black
   text("ON THE KEYS", width/2, height/4 + 50);
   
-  // create button
-  fill(173, 216, 130);
+  // play button
+  fill(150); // Gray color
   rectMode(CENTER);
-  rect(width/2, height/2, 300, 150, 10);
+  rect(width/2, height/2 - 75, 400, 60, 10);
+  fill(255);
+  textSize(40);
+  text("PLAY", width/2, height/2 - 70);
   
-  fill(0);
-  textSize(80);
-  text("PLAY!", width/2, height/2 + 20);
+  // credits button
+  fill(150); // Gray color
+  rectMode(CENTER);
+  rect(width/2, height/2, 400, 60, 10);
+  fill(255);
+  textSize(40);
+  text("CREDITS", width/2, height/2 + 5);
+  
+  // settings button
+  fill(150); // Gray color
+  rectMode(CENTER);
+  rect(width/2, height/2 + 75, 400, 60, 10);
+  fill(255);
+  textSize(40);
+  text("SETTINGS", width/2, height/2 + 80);
+  
+  // exit button
+  fill(150); // Gray color
+  rectMode(CENTER);
+  rect(width/2, height/2 + 150, 400, 60, 10);
+  fill(255);
+  textSize(40);
+  text("EXIT", width/2, height/2 + 155);
+}
+
+void drawField() {
 }
 
 void startGame() {
   gameStarted = true;
-  // more to add i thinl
 }
