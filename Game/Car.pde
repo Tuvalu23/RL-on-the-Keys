@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-public class Car {
-  color carColor;
-  PVector velocity;
-  PVector acceleration;
-  PVector location;
-  
-}
-=======
 public class Car {
   PVector position;
   PVector velocity;
@@ -27,4 +18,4 @@ public class Car {
     // idk we need to make cool shape
   }
 }
->>>>>>> refs/remotes/origin/main
+
