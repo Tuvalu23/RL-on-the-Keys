@@ -24,4 +24,12 @@ No libraries should be needed.
 None.
 
 **To-Do List**
-[ ] h
+
+[x] Create Opening Screen
+[x] Create Cars and Ball
+[] Create Game Field
+[x] Apply Gravity and Collissions
+[x] Create Keybinds
+[] Add Jump and Boost
+[] Settings
+[] Credits
