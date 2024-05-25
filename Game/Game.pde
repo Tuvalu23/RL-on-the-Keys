@@ -2,16 +2,21 @@ boolean gameStarted = false;
 Car car1, car2;
 Ball ball;
 int score1, score2; 
-PImage background;
+PImage background, car1Image, car2Image;
 PFont font;
+PVector gravity;
 
 void setup() {
-  size(1600, 1000);
+  size(1600, 900); // made it 3d for now maybe we could do this
   font = createFont("Arial Bold", 24);
   background = loadImage("background.jpg");
-  car1 = new Car(color(0, 0, 255), width/4, 10, 1); // player 1
-  car2 = new Car(color(255, 140, 0), width* 3/4, 10, 2); // player 2
-  ball = new Ball(width/2, 10);
+  car1Image = loadImage("orangecar.png"); 
+  car2Image = loadImage("bluecar.png"); 
+  car1 = new Car(car1Image, width/4, height - 20, 1); // player 1
+  car2 = new Car(car2Image, width* 3/4, height - 20, 2); // player 2
+  ball = new Ball(width/2, height - 200);
+  
+  gravity = new PVector(0, 3.5); //gravity. we should prob do it here bc both ball + car experience gravity
 }
 
 void draw() {
@@ -22,7 +27,7 @@ void draw() {
   else {
     background(255);
     drawField();
-    //update();
+    update();
   }
 }
 
@@ -86,9 +91,32 @@ void displayOpeningScreen() {
 }
 
 void drawField() {
+  camera(width/2, height/2, 800, width/2, height/2, 0, 0, 1, 0);
   
+  // Display cars and ball
+  car1.display();
+  car2.display();
+  ball.display();
 }
 
 void startGame() {
   gameStarted = true;
+}
+
+void update() {
+  car1.applyForce(gravity);
+  car2.applyForce(gravity);
+  ball.applyForce(gravity);
+  ball.airResistance();
+
+  car1.update();
+  car2.update();
+  ball.update();
+  
+  ball.checkCollision(car1);
+  ball.checkCollision(car2);
+
+  car1.display();
+  car2.display();
+  ball.display();
 }
