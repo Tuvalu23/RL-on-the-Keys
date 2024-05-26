@@ -21,19 +21,22 @@ public class Ball {
   
   // fixed so bounce works properly
   void bounce(){
-    if (location.y - size / 2 <= 0 || location.y + size / 2 >= height) {
-      velocity.y *= -1;
-      if (location.y - size / 2 <= 0)
-        location.y = size / 2;
-      else
-        location.y = height - size / 2;
+    float xOffset = 115;
+    float yOffset = 100;
+
+    if (location.y - size / 2 <= yOffset || location.y + size / 2 >= height - yOffset) {
+        velocity.y *= -1;
+        if (location.y - size / 2 <= yOffset)
+            location.y = yOffset + size / 2;
+        else
+            location.y = height - yOffset - size / 2;
     }
-    if (location.x - size / 2 <= 0 || location.x + size / 2 >= width) {
-      velocity.x *= -1;
-      if (location.x - size / 2 <= 0)
-        location.x = size / 2;
-      else
-        location.x = width - size / 2;
+    if (location.x - size / 2 <= xOffset || location.x + size / 2 >= width - xOffset) {
+        velocity.x *= -1;
+        if (location.x - size / 2 <= xOffset)
+            location.x = xOffset + size / 2;
+        else
+            location.x = width - xOffset - size / 2;
     }
   }
   

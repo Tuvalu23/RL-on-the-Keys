@@ -66,8 +66,8 @@ public class Car {
       facingOtherSide = true;
     }
     
-    position.x = constrain(position.x, carImage.width * 0.35 / 2, width - carImage.width * 0.35 / 2); // constrain x pos
-    position.y = constrain(position.y, carImage.height * 0.35 / 2, height - carImage.height * 0.35 / 2); // constrain y pos
+    position.x = constrain(position.x, carImage.width * 0.35 / 2 + 114, width - carImage.width * 0.35 / 2 - 108); // constrain x pos
+    position.y = constrain(position.y, carImage.height * 0.35 / 2 + 95, height - carImage.height * 0.35 / 2 - 100); // constrain y pos
   }
   
   void display() {
