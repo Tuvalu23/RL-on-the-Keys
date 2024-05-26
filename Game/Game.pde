@@ -2,16 +2,17 @@ boolean gameStarted = false;
 Car car1, car2;
 Ball ball;
 int score1, score2; 
-PImage background, car1Image, car2Image;
+PImage background, car1Image, car2Image, gameField;
 PFont font;
 PVector gravity;
 
 void setup() {
-  size(1600, 900); // made it 3d for now maybe we could do this
+  size(1600, 900, P3D); // made it 3d for now maybe we could do this
   font = createFont("Arial Bold", 24);
   background = loadImage("background.jpg");
   car1Image = loadImage("orangecar.png"); 
   car2Image = loadImage("bluecar.png"); 
+  gameField = loadImage("rlfield.jpg");
   car1 = new Car(car1Image, width/4, height - 20, 1); // player 1
   car2 = new Car(car2Image, width* 3/4, height - 20, 2); // player 2
   ball = new Ball(width/2, height - 200);
@@ -92,6 +93,7 @@ void displayOpeningScreen() {
 
 void drawField() {
   camera(width/2, height/2, 800, width/2, height/2, 0, 0, 1, 0);
+  image(gameField, width/2, height/2, width, height);
   
   // Display cars and ball
   car1.display();
