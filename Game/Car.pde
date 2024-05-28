@@ -6,6 +6,8 @@ public class Car {
   float angle; // heading essentially
   int mode; // left or right keys
   boolean facingOtherSide;
+  boolean onGround;
+  int jumpCount;
   
   Car(PImage carImage, float x, float y, int mode) {
     this.carImage = carImage;
@@ -15,6 +17,8 @@ public class Car {
     angle = 0;
     this.mode = mode;
     this.facingOtherSide = (mode == 1);
+    onGround = true;
+    jumpCount = 2;
   }
   
   //have to continue working with angles
@@ -42,7 +46,7 @@ public class Car {
           acceleration.x = 0.5;
         }
         if (keyCode == TAB){
-          acceleration.y -= 0.5;
+          jump();
         }
       }
     } else { // right screen
@@ -54,7 +58,7 @@ public class Car {
           acceleration.x = 0.5;
         }
         if (keyCode == CONTROL){
-          acceleration.y = -0.5;
+          jump();
         }
       }
     }
@@ -74,6 +78,27 @@ public class Car {
     
     position.x = constrain(position.x, carImage.width * 0.35 / 2 + 114, width - carImage.width * 0.35 / 2 - 108); // constrain x pos
     position.y = constrain(position.y, carImage.height * 0.35 / 2 + 95, height - carImage.height * 0.35 / 2 - 100); // constrain y pos
+  }
+  
+  void jump() {
+    if (jumpCount > 0 && !onGround && velocity.x > 0) {
+      //flip 
+    }
+    else if (jumpCount > 0) {
+      acceleration.y = -2;
+      jumpCount--;
+    }
+    
+    if (position.y != height - carImage.height * 0.35 / 2 - 100) { // if car is not on ground
+     onGround = false;
+    }
+    else {
+      onGround = true;
+    }
+    
+    if (onGround) {
+      jumpCount = 3; // 3 jumps b4 u gotta getback on ground
+    }
   }
   
   void display() {
