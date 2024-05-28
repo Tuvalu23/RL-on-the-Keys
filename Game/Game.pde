@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 boolean gameStarted = false;
 boolean credits = false;
 Car car1, car2;
@@ -308,4 +307,3 @@ void update() {
   car2.display();
   ball.display();
 }
->>>>>>> refs/remotes/origin/main
