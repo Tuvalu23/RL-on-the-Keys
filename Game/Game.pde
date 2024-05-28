@@ -1,4 +1,5 @@
 boolean gameStarted = false;
+boolean credits = false;
 Car car1, car2;
 Ball ball;
 int score1, score2; 
@@ -21,9 +22,12 @@ void setup() {
 }
 
 void draw() {
-  if (!gameStarted) {
+  if (!gameStarted && !credits) {
     image(background, 0, 0, width, height); 
     displayOpeningScreen();
+  }
+  else if (credits){
+    credits();
   }
   else {
     background(255);
@@ -33,22 +37,49 @@ void draw() {
 }
 
 void mousePressed() {
-  // checks if play button is pressed
-  if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 100 && mouseY < height/2 - 50) { 
+  if (!credits && !gameStarted) {
+    // checks if play button is pressed
+    if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 100 && mouseY < height/2 - 50) { 
       startGame();
     }
     // checks if credits is pressed
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 25 && mouseY < height/2 + 25) { 
-      // credits();
+      credits = true; // show credits
     }
     // check if settings is pressed
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 + 50 && mouseY < height/2 + 100) { 
       // settings();
     }
-    // check if exit is pressded
+    // check if exit is pressed
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 + 125 && mouseY < height/2 + 175) { 
       exit(); // quit
     }
+  } else if (credits) {
+    // checks if back button is pressed on credits screen
+    if (mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > height - 130 && mouseY < height - 70) {
+      credits = false; // return to opening screen
+    }
+  }
+}
+
+void credits(){
+  background(0);
+  textFont(font);
+  textAlign(CENTER, CENTER);
+  fill(255);
+  textSize(50);
+  text("CREDITS", width/2, height/4);
+  textSize(30);
+  text("Ben Rudinkski", width/2, height/2 - 40);
+  text("Vedant Kothari", width/2, height/2);
+  text("Endrit Idrizi", width/2, height/2 + 40);
+  //back button
+  fill(150);
+  rectMode(CENTER);
+  rect(width/2, height - 100, 200, 60, 10);
+  fill(255);
+  textSize(30);
+  text("BACK", width/2, height - 100);
 }
 
 void displayOpeningScreen() {
