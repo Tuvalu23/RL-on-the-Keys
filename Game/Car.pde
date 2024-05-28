@@ -23,7 +23,11 @@ public class Car {
       rotate(-radians(1));
     }
     else{
+<<<<<<< HEAD
       //car.rotate(radians(1));
+=======
+      rotate(-PI/5);
+>>>>>>> refs/remotes/origin/main
     }
   }
   
@@ -41,6 +45,13 @@ public class Car {
         if (key == 'd') {
           acceleration.x = 0.5;
         }
+<<<<<<< HEAD
+=======
+        if (keyCode == TAB){
+          acceleration.y -= 0.5;
+        }
+        //velocity.limit(-8);
+>>>>>>> refs/remotes/origin/main
       }
     } else { // right screen
       if (keyPressed) {
@@ -50,7 +61,15 @@ public class Car {
         if (keyCode == RIGHT) {
           acceleration.x = 0.5;
         }
+<<<<<<< HEAD
       }
+=======
+        if (keyCode == CONTROL){
+          acceleration.y = -0.5;
+        }
+      }
+      //velocity.limit(-8);
+>>>>>>> refs/remotes/origin/main
     }
     
     velocity.add(acceleration);
@@ -76,7 +95,24 @@ public class Car {
     if (!facingOtherSide) {
       scale(-1, 1); // flip horizontally
     }
+<<<<<<< HEAD
     rotate(angle); // angle stuff endrit
+=======
+    if (mode == 1){
+      if (keyPressed){
+        if (key == 'w'){
+          this.angleUp();
+        }
+      }
+    }
+    else{
+      if (keyPressed){
+        if (keyCode == UP){
+          this.angleUp();
+        }
+      }
+    }// angle stuff endrit
+>>>>>>> refs/remotes/origin/main
     imageMode(CENTER);
     image(carImage, 0, 0, carImage.width * 0.35, carImage.height * 0.35);
     popMatrix();
