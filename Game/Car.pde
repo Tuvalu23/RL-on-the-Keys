@@ -23,7 +23,7 @@ public class Car {
       rotate(-radians(1));
     }
     else{
-      //car.rotate(radians(1));
+      rotate(-PI/5);
     }
   }
   
@@ -41,6 +41,10 @@ public class Car {
         if (key == 'd') {
           acceleration.x = 0.5;
         }
+        if (keyCode == TAB){
+          acceleration.y -= 0.5;
+        }
+        //velocity.limit(-8);
       }
     } else { // right screen
       if (keyPressed) {
@@ -50,7 +54,11 @@ public class Car {
         if (keyCode == RIGHT) {
           acceleration.x = 0.5;
         }
+        if (keyCode == CONTROL){
+          acceleration.y = -0.5;
+        }
       }
+      //velocity.limit(-8);
     }
     
     velocity.add(acceleration);
@@ -76,7 +84,20 @@ public class Car {
     if (!facingOtherSide) {
       scale(-1, 1); // flip horizontally
     }
-    rotate(angle); // angle stuff endrit
+    if (mode == 1){
+      if (keyPressed){
+        if (key == 'w'){
+          this.angleUp();
+        }
+      }
+    }
+    else{
+      if (keyPressed){
+        if (keyCode == UP){
+          this.angleUp();
+        }
+      }
+    }// angle stuff endrit
     imageMode(CENTER);
     image(carImage, 0, 0, carImage.width * 0.35, carImage.height * 0.35);
     popMatrix();
