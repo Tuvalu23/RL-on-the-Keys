@@ -18,7 +18,7 @@ void setup() {
   car2 = new Car(car2Image, width* 3/4, height - 20, 2); // player 2
   ball = new Ball(width/2, height - 200);
   
-  gravity = new PVector(0, 3.5); //gravity. we should prob do it here bc both ball + car experience gravity
+  gravity = new PVector(0, 5); //gravity. we should prob do it here bc both ball + car experience gravity
 }
 
 void draw() {
