@@ -37,32 +37,30 @@ void draw() {
 }
 
 void mousePressed() {
-  if (!credits && !gameStarted) {
-    // checks if play button is pressed
-    if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 100 && mouseY < height/2 - 50) { 
+  // checks if play button is pressed
+  if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 100 && mouseY < height/2 - 50) { 
       startGame();
     }
     // checks if credits is pressed
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 25 && mouseY < height/2 + 25) { 
-      credits = true; // show credits
+      credits();
     }
     // check if settings is pressed
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 + 50 && mouseY < height/2 + 100) { 
       // settings();
     }
-    // check if exit is pressed
+    // check if exit is pressded
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 + 125 && mouseY < height/2 + 175) { 
       exit(); // quit
     }
-  } else if (credits) {
-    // checks if back button is pressed on credits screen
-    if (mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > height - 130 && mouseY < height - 70) {
-      credits = false; // return to opening screen
+    else if (credits && mouseX > width/2 - 150 && mouseX < width/2 + 150 && mouseY > height/2 - 100 && mouseY < height/2 - 100) {
+      credits = false;
+      //need to fix this method because coordinates do not work for button
     }
-  }
 }
 
 void credits(){
+  credits = true;
   background(0);
   textFont(font);
   textAlign(CENTER, CENTER);
