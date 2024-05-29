@@ -10,6 +10,7 @@ public class Car {
   boolean onLeftWall;
   boolean onRightWall;
   int jumpCount;
+  int fuel;
   int mode; // left or right keys
   
   //flip vars
@@ -28,6 +29,7 @@ public class Car {
     onLeftWall = false;
     onRightWall = true;
     jumpCount = 2;
+    fuel = 100;
   }
   
   //have to continue working with angles
@@ -57,6 +59,7 @@ public class Car {
   
   void update() {
     angleGravity();
+    refuel();
     if (mode == 1) { // left screen
       if (keyPressed) {
         if (keys['A']) {
@@ -71,8 +74,11 @@ public class Car {
       if (keys['S']) {
         angleDown();
       }
-      if (keys[TAB]) {
+      if (keys[32]) {
         jump();
+      }
+      if (keys[SHIFT]){
+        useBoost();
       }
       }
     } else { // right screen
@@ -89,8 +95,11 @@ public class Car {
       if (keys[DOWN]) {
         angleDown();
       }
-      if (keys[ENTER]) {
+      if (keys[CONTROL]) {
         jump();
+      }
+      if (keys['0']){
+        useBoost();
       }
       }
     }
@@ -110,6 +119,9 @@ public class Car {
     velocity.limit(15);
     velocity.mult(0.99); // friction
     
+    
+    //HAVE TO FIX THIS SO THAT BOOST CAN WORK
+    //
     if (velocity.x < 0) {
       facingOtherSide = false;
     }
@@ -168,6 +180,25 @@ public class Car {
       jumpCount--;
     }
   
+  }
+  
+  void useBoost(){
+    if (fuel > 0){
+      PVector boost = new PVector(cos(angle),sin(angle));
+      acceleration.add(boost);
+      fuel -= 1;
+    }
+  }
+  
+  void refuel(){
+    if (onGround || onRightWall || onLeftWall || onRoof){
+      if (fuel < 100){
+        fuel += 2;
+      }
+      if (fuel > 100){
+        fuel = 100;
+      }
+    }
   }
   
   void display() {
