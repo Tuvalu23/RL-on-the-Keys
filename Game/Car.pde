@@ -48,7 +48,6 @@ public class Car {
         if (keyCode == TAB){
           jump();
         }
-        //velocity.limit(-8);
       }
     } else { // right screen
       if (keyPressed) {
@@ -62,7 +61,6 @@ public class Car {
           jump();
         }
       }
-      //velocity.limit(-8);
     }
     
     velocity.add(acceleration);
