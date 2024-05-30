@@ -217,4 +217,5 @@ public class Car {
     float distance = dist(position.x, position.y, ball.location.x, ball.location.y);
     return distance < (carImage.width * 0.35 / 2 + ball.size / 2) - 30 || distance < (carImage.height * 0.35 / 2 + ball.size / 2) - 60;
   }
+  
 }
