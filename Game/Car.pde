@@ -9,6 +9,7 @@ public class Car {
   boolean onRoof;
   boolean onLeftWall;
   boolean onRightWall;
+  boolean turning;
   int jumpCount;
   int fuel;
   int mode; // left or right keys
@@ -28,6 +29,7 @@ public class Car {
     onRoof = false;
     onLeftWall = false;
     onRightWall = true;
+    turning = false;
     jumpCount = 2;
     fuel = 100;
   }
@@ -74,7 +76,7 @@ public class Car {
       if (keys['S']) {
         angleDown();
       }
-      if (keys[32]) {
+      if (keys[TAB]) {
         jump();
       }
       if (keys[SHIFT]){
@@ -95,22 +97,27 @@ public class Car {
       if (keys[DOWN]) {
         angleDown();
       }
-      if (keys[CONTROL]) {
+      if (keys[ENTER]) {
         jump();
       }
-      if (keys['0']){
+      if (keys[CONTROL]){
         useBoost();
       }
       }
     }
     
     if (degreesLeft > 0) { //handle flips and rotations in animation
+      turning = true;
       angle -= radians(5);
       degreesLeft -= 5;
     }
     else if (degreesLeft < 0) {
+      turning = true;
       angle += radians(5);
       degreesLeft += 5;
+    }
+    else {
+      turning = false;
     }
       
     velocity.add(acceleration);
@@ -146,6 +153,12 @@ public class Car {
       onLeftWall = false;
       onRightWall = false;
       angle = PI; // Set angle to 180 degrees when on the ceiling
+      if (facingOtherSide) { // swap sides on ceiling
+        facingOtherSide = false;
+      }
+      else {
+        facingOtherSide = true;
+      }
       jumpCount = 2; // Reset jump count when on the ceiling
     } else if (position.x <= carImage.width * 0.35 / 2 + 94) {
       onGround = false;
@@ -170,7 +183,7 @@ public class Car {
   }
   
   void jump() {
-    if (jumpCount > 0 && jumpCount != 2 && !onGround && velocity.x > 5) {
+    if (jumpCount > 0 && jumpCount != 2 && !onGround && abs(velocity.x) > 5) {
       velocity.y = -10;
       degreesLeft = 360;
       jumpCount--;
@@ -183,17 +196,28 @@ public class Car {
   }
   
   void useBoost(){
-    if (fuel > 0){
-      PVector boost = new PVector(cos(angle),sin(angle));
-      acceleration.add(boost);
-      fuel -= 1;
+   if (fuel > 0 && !turning) {
+    float boostAngle = angle;
+    if ((!facingOtherSide && angle == PI) || (facingOtherSide && angle == 0)) {
+      boostAngle -= PI;
     }
+    if (!facingOtherSide) {
+      boostAngle -= PI; // Adjust the angle by 180 degrees if the car is facing the other side
+      boostAngle *= -1;
+    }
+    PVector boost = PVector.fromAngle(boostAngle).mult(1.5); // Adjust the multiplier for desired boost strength
+    acceleration.add(boost);
+    fuel -= 1;
   }
+  }
+  
+  // 1. if your upside down boost goes correct way but the car turns opposite way
+  // 2. if you boost while flip bad things happen so shld we make it so if ur turning u cant boost
   
   void refuel(){
     if (onGround || onRightWall || onLeftWall || onRoof){
       if (fuel < 100){
-        fuel += 2;
+        fuel += 1;
       }
       if (fuel > 100){
         fuel = 100;
@@ -211,6 +235,24 @@ public class Car {
     imageMode(CENTER);
     image(carImage, 0, 0, carImage.width * 0.35, carImage.height * 0.35);
     popMatrix();
+    displayFuelBar();
+  }
+  
+  void displayFuelBar() {
+    if (fuel < 100) {
+      float barWidth = 80;
+      float barHeight = 10;
+      float x = position.x - barWidth / 2; // Adjust x to be the left edge of the bar
+      float y = position.y - carImage.height * 0.35 / 2 - 45;
+      float fuelRatio = fuel / 100.0;
+      int red = (int) map(fuelRatio, 0, 1, 255, 0);
+      int green = (int) map(fuelRatio, 0, 1, 0, 255);
+      noStroke();
+      fill(255, 0, 0); // Background color (red)
+      rect(x, y, barWidth, barHeight);
+      fill(red, green, 0); // Foreground color (gradient from red to green)
+      rect(x, y, barWidth * fuelRatio, barHeight); // Maybe fix so doesn't start in center
+  }
   }
   
    boolean intersects(Ball ball) {
