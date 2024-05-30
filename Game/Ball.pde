@@ -50,8 +50,21 @@ public class Ball {
   }
   
   void display() {
-    fill(100, 100, 100); // not sure what color yet
-    circle(location.x, location.y, size);
+    if (isBall3D) {
+      PGraphics pg = createGraphics(int(size), int(size));
+      pg.beginDraw();
+      pg.noStroke();
+      for (int i = 0; i < size / 2; i++) {
+        float inter = map(i, 0, size / 2, 100, 255); // Gray on outside (100) to white on inside (255)
+        pg.fill(inter);
+        pg.ellipse(size / 2, size / 2, size - i * 2, size - i * 2);
+      }
+      pg.endDraw();
+      image(pg, location.x - size / 2, location.y - size / 2);
+    } else {
+      fill(100, 100, 100); // Gray color
+      ellipse(location.x, location.y, size, size);
+    }
   }
  
  void checkCollision(Car car) {

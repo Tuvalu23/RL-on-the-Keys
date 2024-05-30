@@ -4,10 +4,19 @@ public class Car {
   PVector acceleration;
   PImage carImage;
   float angle; // heading essentially
-  int mode; // left or right keys
   boolean facingOtherSide;
   boolean onGround;
+  boolean onRoof;
+  boolean onLeftWall;
+  boolean onRightWall;
+  boolean turning;
   int jumpCount;
+  int fuel;
+  String[] arr = {" "};
+  int mode; // left or right keys
+  
+  //flip vars
+  int degreesLeft = 0; 
   
   Car(PImage carImage, float x, float y, int mode) {
     this.carImage = carImage;
@@ -18,17 +27,32 @@ public class Car {
     this.mode = mode;
     this.facingOtherSide = (mode == 1);
     onGround = true;
+    onRoof = false;
+    onLeftWall = false;
+    onRightWall = true;
+    turning = false;
     jumpCount = 2;
+    fuel = 100;
   }
   
   //have to continue working with angles
   void angleUp(){
-    if (angle > 3*PI/2){
-      rotate(-radians(1));
+      degreesLeft = 15;
+  }
+  void angleDown(){
+    if (!onGround && !onRoof && !onLeftWall && !onRightWall) {
+    degreesLeft = -15;
     }
-    else{
-      rotate(-PI/5);
+  }
+  
+  void angleGravity() { // confusing but gravity is important especially for aggles
+    if (!onLeftWall && !onRightWall && angle < PI / 2 && angle > 0) {
+      angle += radians(4);
     }
+    if (!onLeftWall && !onRightWall && angle < 3 * PI / 2 && angle > PI) {
+      angle -= radians(4);
+    }
+    
   }
   
   void applyForce(PVector force) {
@@ -37,67 +61,184 @@ public class Car {
   }
   
   void update() {
+    text(jumpCount,500,500);
+    angleGravity();
+    refuel();
     if (mode == 1) { // left screen
       if (keyPressed) {
-        if (key == 'a') {
-          acceleration.x = -0.5;
-        }
-        if (key == 'd') {
-          acceleration.x = 0.5;
-        }
-        if (keyCode == TAB){
-          jump();
-        }
+        if (keys['A']) {
+        acceleration.x = -0.5;
+      }
+      if (keys['D']) {
+        acceleration.x = 0.5;
+      }
+      if (keys['W']) {
+        angleUp();
+      }
+      if (keys['S']) {
+        angleDown();
+      }
+      if (keys[32]) {
+        jump();
+      }
+      if (keys[SHIFT]){
+        useBoost();
+      }
       }
     } else { // right screen
       if (keyPressed) {
-        if (keyCode == LEFT) {
-          acceleration.x = -0.5;
-        }
-        if (keyCode == RIGHT) {
-          acceleration.x = 0.5;
-        }
-        if (keyCode == CONTROL){
-          jump();
-        }
+        if (keys[LEFT]) {
+        acceleration.x = -0.5;
+      }
+      if (keys[RIGHT]) {
+        acceleration.x = 0.5;
+      }
+      if (keys[UP]) {
+        angleUp();
+      }
+      if (keys[DOWN]) {
+        angleDown();
+      }
+      if (keys[ENTER]) {
+        jump();
+      }
+      if (keys[CONTROL]){
+        useBoost();
+      }
       }
     }
     
+    if (degreesLeft > 0) { //handle flips and rotations in animation
+      turning = true;
+      angle -= radians(5);
+      degreesLeft -= 5;
+    }
+    else if (degreesLeft < 0) {
+      turning = true;
+      angle += radians(5);
+      degreesLeft += 5;
+    }
+    else {
+      turning = false;
+    }
+      
     velocity.add(acceleration);
     position.add(velocity);
     acceleration.mult(0);
     velocity.limit(15);
     velocity.mult(0.99); // friction
     
+    
+    //HAVE TO FIX THIS SO THAT BOOST CAN WORK
+    //
     if (velocity.x < 0) {
       facingOtherSide = false;
     }
     else if (velocity.x > 0) {
       facingOtherSide = true;
     }
+   
     
-    position.x = constrain(position.x, carImage.width * 0.35 / 2 + 114, width - carImage.width * 0.35 / 2 - 108); // constrain x pos
+    position.x = constrain(position.x, carImage.width * 0.35 / 2 + 94, width - carImage.width * 0.35 / 2 - 88); // constrain x pos
     position.y = constrain(position.y, carImage.height * 0.35 / 2 + 95, height - carImage.height * 0.35 / 2 - 100); // constrain y pos
+    
+    if (position.y >= height - carImage.height * 0.35 / 2 - 100) {
+      onGround = true;
+      onRoof = false;
+      onLeftWall = false;
+      onRightWall = false;
+      angle = 0; // Set angle to 0 degrees when on the ground
+      jumpCount = 2; // Reset jump count when on the ground
+    } else if (position.y <= carImage.height * 0.35 / 2 + 95) {
+      onGround = false;
+      onRoof = true;
+      onLeftWall = false;
+      onRightWall = false;
+      angle = PI; // Set angle to 180 degrees when on the ceiling
+      if (facingOtherSide) { // swap sides on ceiling
+        facingOtherSide = false;
+      }
+      else {
+        facingOtherSide = true;
+      }
+      jumpCount = 2; // Reset jump count when on the ceiling
+    } else if (position.x <= carImage.width * 0.35 / 2 + 94) {
+      onGround = false;
+      onRoof = false;
+      onLeftWall = true;
+      onRightWall = false;
+      angle = -PI / 2; // Set angle to 90 degrees when on the left wall
+      jumpCount = 2; // Reset jump count when on the left wall
+    } else if (position.x >= width - carImage.width * 0.35 / 2 - 108) {
+      onGround = false;
+      onRoof = false;
+      onLeftWall = false;
+      onRightWall = true;
+      angle = -PI / 2; // Set angle to 270 degrees when on the right wall
+      jumpCount = 2; // Reset jump count when on the right wall
+    } else {
+      onGround = false;
+      onRoof = false;
+      onLeftWall = false;
+      onRightWall = false;
+    }
   }
   
   void jump() {
-    if (jumpCount > 0 && !onGround && velocity.x > 0) {
-      //flip 
-    }
-    else if (jumpCount > 0) {
-      acceleration.y = -2;
+    if ((jumpCount == 1) && (!onGround && abs(velocity.x) > 5)) {
+      velocity.y = -10;
+      degreesLeft = 360;
       jumpCount--;
     }
-    
-    if (position.y != height - carImage.height * 0.35 / 2 - 100) { // if car is not on ground
-     onGround = false;
+    else if (jumpCount == 2) {
+      velocity.y = - 5;
+      jumpCount--;
     }
-    else {
-      onGround = true;
+  
+  }
+  
+  //void jump() {
+  //  if (jumpCount == 2 || onGround || ((jumpCount == 1) && (!onGround) && (abs(velocity.x) < 5))) {
+  //    velocity.y = - 5;
+  //    jumpCount--;
+  //  }
+  //  else if ((jumpCount == 1) && !onGround && (abs(velocity.x) > 5)) {
+  //    velocity.y = -10;
+  //    degreesLeft = 360;
+  //    jumpCount--;
+  //  }
+  
+  //}
+  
+  
+  
+  void useBoost(){
+   if (fuel > 0 && !turning) {
+    float boostAngle = angle;
+    //if ((facingOtherSide && angle == PI) || (!facingOtherSide && angle == 0)) {
+    //  boostAngle -= PI;
+    //}
+    if (!facingOtherSide) {
+      boostAngle -= PI; // Adjust the angle by 180 degrees if the car is facing the other side
+      boostAngle *= -1;
     }
-    
-    if (onGround) {
-      jumpCount = 3; // 3 jumps b4 u gotta getback on ground
+    PVector boost = PVector.fromAngle(boostAngle).mult(1.5); // Adjust the multiplier for desired boost strength
+    acceleration.add(boost);
+    fuel -= 1;
+  }
+  }
+  
+  // 1. if your upside down boost goes correct way but the car turns opposite way
+  // 2. if you boost while flip bad things happen so shld we make it so if ur turning u cant boost
+  
+  void refuel(){
+    if (onGround || onRightWall || onLeftWall || onRoof){
+      if (fuel < 100){
+        fuel += 1;
+      }
+      if (fuel > 100){
+        fuel = 100;
+      }
     }
   }
   
@@ -107,23 +248,28 @@ public class Car {
     if (!facingOtherSide) {
       scale(-1, 1); // flip horizontally
     }
-    if (mode == 1){
-      if (keyPressed){
-        if (key == 'w'){
-          this.angleUp();
-        }
-      }
-    }
-    else{
-      if (keyPressed){
-        if (keyCode == UP){
-          this.angleUp();
-        }
-      }
-    }// angle stuff endrit
+    rotate(angle);
     imageMode(CENTER);
     image(carImage, 0, 0, carImage.width * 0.35, carImage.height * 0.35);
     popMatrix();
+    displayFuelBar();
+  }
+  
+  void displayFuelBar() {
+    if (fuel < 100) {
+      float barWidth = 80;
+      float barHeight = 10;
+      float x = position.x - barWidth / 2; // Adjust x to be the left edge of the bar
+      float y = position.y - carImage.height * 0.35 / 2 - 45;
+      float fuelRatio = fuel / 100.0;
+      int red = (int) map(fuelRatio, 0, 1, 255, 0);
+      int green = (int) map(fuelRatio, 0, 1, 0, 255);
+      noStroke();
+      fill(255, 0, 0); // Background color (red)
+      rect(x, y, barWidth, barHeight);
+      fill(red, green, 0); // Foreground color (gradient from red to green)
+      rect(x, y, barWidth * fuelRatio, barHeight); // Maybe fix so doesn't start in center
+  }
   }
   
    boolean intersects(Ball ball) {
