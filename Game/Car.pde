@@ -12,6 +12,7 @@ public class Car {
   boolean turning;
   int jumpCount;
   int fuel;
+  String[] arr = {" "};
   int mode; // left or right keys
   
   //flip vars
@@ -60,6 +61,7 @@ public class Car {
   }
   
   void update() {
+    text(jumpCount,500,500);
     angleGravity();
     refuel();
     if (mode == 1) { // left screen
@@ -76,7 +78,7 @@ public class Car {
       if (keys['S']) {
         angleDown();
       }
-      if (keys[TAB]) {
+      if (keys[32]) {
         jump();
       }
       if (keys[SHIFT]){
@@ -183,17 +185,32 @@ public class Car {
   }
   
   void jump() {
-    if (jumpCount > 0 && jumpCount != 2 && !onGround && abs(velocity.x) > 5) {
+    if ((jumpCount == 1) && (!onGround && abs(velocity.x) > 5)) {
       velocity.y = -10;
       degreesLeft = 360;
       jumpCount--;
     }
-    else if (jumpCount > 0) {
+    else if (jumpCount == 2) {
       velocity.y = - 5;
       jumpCount--;
     }
   
   }
+  
+  //void jump() {
+  //  if (jumpCount == 2 || onGround || ((jumpCount == 1) && (!onGround) && (abs(velocity.x) < 5))) {
+  //    velocity.y = - 5;
+  //    jumpCount--;
+  //  }
+  //  else if ((jumpCount == 1) && !onGround && (abs(velocity.x) > 5)) {
+  //    velocity.y = -10;
+  //    degreesLeft = 360;
+  //    jumpCount--;
+  //  }
+  
+  //}
+  
+  
   
   void useBoost(){
    if (fuel > 0 && !turning) {
