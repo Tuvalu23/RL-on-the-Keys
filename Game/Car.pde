@@ -139,17 +139,17 @@ public class Car {
     }
    
     
-    position.x = constrain(position.x, carImage.width * 0.35 / 2 + 94, width - carImage.width * 0.35 / 2 - 88); // constrain x pos
-    position.y = constrain(position.y, carImage.height * 0.35 / 2 + 95, height - carImage.height * 0.35 / 2 - 100); // constrain y pos
+    position.x = constrain(position.x, carImage.width * 0.2 / 2 + 94, width - carImage.width * 0.2 / 2 - 88); // constrain x pos
+    position.y = constrain(position.y, carImage.height * 0.2 / 2 + 95, height - carImage.height * 0.2 / 2 - 100); // constrain y pos
     
-    if (position.y >= height - carImage.height * 0.35 / 2 - 100) {
+    if (position.y >= height - carImage.height * 0.2 / 2 - 100) {
       onGround = true;
       onRoof = false;
       onLeftWall = false;
       onRightWall = false;
       angle = 0; // Set angle to 0 degrees when on the ground
       jumpCount = 2; // Reset jump count when on the ground
-    } else if (position.y <= carImage.height * 0.35 / 2 + 95) {
+    } else if (position.y <= carImage.height * 0.2 / 2 + 95) {
       onGround = false;
       onRoof = true;
       onLeftWall = false;
@@ -162,14 +162,14 @@ public class Car {
         facingOtherSide = true;
       }
       jumpCount = 2; // Reset jump count when on the ceiling
-    } else if (position.x <= carImage.width * 0.35 / 2 + 94) {
+    } else if (position.x <= carImage.width * 0.2 / 2 + 94) {
       onGround = false;
       onRoof = false;
       onLeftWall = true;
       onRightWall = false;
       angle = -PI / 2; // Set angle to 90 degrees when on the left wall
       jumpCount = 2; // Reset jump count when on the left wall
-    } else if (position.x >= width - carImage.width * 0.35 / 2 - 108) {
+    } else if (position.x >= width - carImage.width * 0.2 / 2 - 108) {
       onGround = false;
       onRoof = false;
       onLeftWall = false;
@@ -250,7 +250,7 @@ public class Car {
     }
     rotate(angle);
     imageMode(CENTER);
-    image(carImage, 0, 0, carImage.width * 0.35, carImage.height * 0.35);
+    image(carImage, 0, 0, carImage.width * 0.2, carImage.height * 0.2);
     popMatrix();
     displayFuelBar();
   }
@@ -260,7 +260,7 @@ public class Car {
       float barWidth = 80;
       float barHeight = 10;
       float x = position.x - barWidth / 2; // Adjust x to be the left edge of the bar
-      float y = position.y - carImage.height * 0.35 / 2 - 45;
+      float y = position.y - carImage.height * 0.2 / 2 - 45;
       float fuelRatio = fuel / 100.0;
       int red = (int) map(fuelRatio, 0, 1, 255, 0);
       int green = (int) map(fuelRatio, 0, 1, 0, 255);
@@ -274,7 +274,7 @@ public class Car {
   
    boolean intersects(Ball ball) {
     float distance = dist(position.x, position.y, ball.location.x, ball.location.y);
-    return distance < (carImage.width * 0.35 / 2 + ball.size / 2) - 30 || distance < (carImage.height * 0.35 / 2 + ball.size / 2) - 60;
+    return distance < (carImage.width * 0.2 / 2 + ball.size / 2) - 30 || distance < (carImage.height * 0.2 / 2 + ball.size / 2) - 60;
   }
   
 }

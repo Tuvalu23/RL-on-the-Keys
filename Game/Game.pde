@@ -14,8 +14,8 @@ void setup() {
   size(1600, 900, P3D); // made it 3d for now maybe we could do this
   font = createFont("Bauhaus 93", 24);
   background = loadImage("background.jpg");
-  car1Image = loadImage("orangecar.png"); 
-  car2Image = loadImage("bluecar.png"); 
+  car1Image = loadImage("bluecar.png"); 
+  car2Image = loadImage("orangecar.png"); 
   gameField = loadImage("rlfield.jpg");
   car1 = new Car(car1Image, width/4, height - 20, 1); // player 1
   car2 = new Car(car2Image, width* 3/4, height - 20, 2); // player 2
