@@ -1,5 +1,7 @@
 boolean gameStarted = false;
 boolean credits = false;
+boolean settings = false;
+boolean isBall3D = true; 
 Car car1, car2;
 Ball ball;
 int score1, score2; 
@@ -10,7 +12,7 @@ boolean[] keys = new boolean[256];
 
 void setup() {
   size(1600, 900, P3D); // made it 3d for now maybe we could do this
-  font = createFont("Arial Bold", 24);
+  font = createFont("Bauhaus 93", 24);
   background = loadImage("background.jpg");
   car1Image = loadImage("orangecar.png"); 
   car2Image = loadImage("bluecar.png"); 
@@ -19,16 +21,19 @@ void setup() {
   car2 = new Car(car2Image, width* 3/4, height - 20, 2); // player 2
   ball = new Ball(width/2, height - 200);
   
-  gravity = new PVector(0, 5); //gravity. we should prob do it here bc both ball + car experience gravity
+  gravity = new PVector(0, 4); //gravity. we should prob do it here bc both ball + car experience gravity
 }
 
 void draw() {
-  if (!gameStarted && !credits) {
+  if (!gameStarted && !credits && !settings) {
     image(background, 0, 0, width, height); 
     displayOpeningScreen();
   }
   else if (credits){
     credits();
+  }
+  else if (settings) {
+    displaySettingsScreen();
   }
   else {
     background(255);
@@ -38,28 +43,39 @@ void draw() {
 }
 
 void mousePressed() {
-  // checks if play button is pressed
-  if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 100 && mouseY < height/2 - 50) { 
+  if (!gameStarted && !credits && !settings) {
+    // checks if play button is pressed
+    if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 100 && mouseY < height/2 - 50) { 
       startGame();
     }
     // checks if credits is pressed
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 25 && mouseY < height/2 + 25) { 
-      credits();
+      credits = true;
     }
     // check if settings is pressed
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 + 50 && mouseY < height/2 + 100) { 
-      // settings();
+      settings = true;
     }
-    // check if exit is pressded
+    // check if exit is pressed
     else if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 + 125 && mouseY < height/2 + 175) { 
       exit(); // quit
     }
-    else if (credits && mouseX > width/2 - 150 && mouseX < width/2 + 150 && mouseY > height/2 - 100 && mouseY < height/2 - 100) {
+  } else if (credits) {
+    // checks if back button in credits is pressed
+    if (mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > height - 130 && mouseY < height - 70) {
       credits = false;
-      //need to fix this method because coordinates do not work for button
     }
+  } else if (settings) {
+    // Toggle Ball 3D/2D button
+    if (mouseX > width/2 - 200 && mouseX < width/2 + 200 && mouseY > height/2 - 80 && mouseY < height/2 - 20) {
+      isBall3D = !isBall3D; // Toggle the ball mode
+    }
+    // Back button
+    else if (mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > height/2 + 20 && mouseY < height/2 + 80) {
+      settings = false;
+    }
+  }
 }
-
 void keyPressed() {
   if (keyCode < keys.length) {
     keys[keyCode] = true;
@@ -72,7 +88,7 @@ void keyReleased() {
   }
 }
 
-void credits(){
+void credits() {
   credits = true;
   background(0);
   textFont(font);
@@ -131,6 +147,31 @@ void displayOpeningScreen() {
   fill(255);
   textSize(40);
   text("EXIT", width/2, height/2 + 155);
+}
+
+void displaySettingsScreen() {
+  background(0);
+  textFont(font);
+  textAlign(CENTER, CENTER);
+  fill(255);
+  textSize(50);
+  text("SETTINGS", width/2, height/4);
+  
+  // Toggle Ball 3D/2D button
+  fill(150);
+  rectMode(CENTER);
+  rect(width/2, height/2 - 50, 400, 60, 10);
+  fill(255);
+  textSize(30);
+  text(isBall3D ? "Ball Mode: 3D" : "Ball Mode: 2D", width/2, height/2 - 50);
+  
+  // Back button
+  fill(150);
+  rectMode(CENTER);
+  rect(width/2, height/2 + 50, 200, 60, 10);
+  fill(255);
+  textSize(30);
+  text("BACK", width/2, height/2 + 50);
 }
 
 void drawField() {
