@@ -97,7 +97,7 @@ void credits() {
   textSize(50);
   text("CREDITS", width/2, height/4);
   textSize(30);
-  text("Ben Rudinkski", width/2, height/2 - 40);
+  text("Ben Rudinski", width/2, height/2 - 40);
   text("Vedant Kothari", width/2, height/2);
   text("Endrit Idrizi", width/2, height/2 + 40);
   //back button
