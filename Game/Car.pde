@@ -198,9 +198,9 @@ public class Car {
   void useBoost(){
    if (fuel > 0 && !turning) {
     float boostAngle = angle;
-    if ((!facingOtherSide && angle == PI) || (facingOtherSide && angle == 0)) {
-      boostAngle -= PI;
-    }
+    //if ((facingOtherSide && angle == PI) || (!facingOtherSide && angle == 0)) {
+    //  boostAngle -= PI;
+    //}
     if (!facingOtherSide) {
       boostAngle -= PI; // Adjust the angle by 180 degrees if the car is facing the other side
       boostAngle *= -1;
