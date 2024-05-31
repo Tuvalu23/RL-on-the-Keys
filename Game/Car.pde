@@ -60,8 +60,24 @@ public class Car {
     acceleration.add(f);
   }
   
+  void keyPressed(){
+    if (mode == 1){
+      if (keyPressed){
+        if (keys[32]){
+          jump();
+        }
+      }
+    }
+    else{
+      if (keyPressed){
+        if (keys[ENTER]){
+          jump();
+        }
+      }
+    }
+  }
+  
   void update() {
-    text(jumpCount,500,500);
     angleGravity();
     refuel();
     if (mode == 1) { // left screen
@@ -78,9 +94,9 @@ public class Car {
       if (keys['S']) {
         angleDown();
       }
-      if (keys[32]) {
-        jump();
-      }
+      //if (keys[32]) {
+      //  jump();
+      //}
       if (keys[SHIFT]){
         useBoost();
       }
@@ -99,9 +115,9 @@ public class Car {
       if (keys[DOWN]) {
         angleDown();
       }
-      if (keys[ENTER]) {
-        jump();
-      }
+      //if (keys[ENTER]) {
+      //  jump();
+      //}
       if (keys[CONTROL]){
         useBoost();
       }
@@ -184,31 +200,31 @@ public class Car {
     }
   }
   
-  void jump() {
-    if ((jumpCount == 1) && (!onGround && abs(velocity.x) > 5)) {
-      velocity.y = -10;
-      degreesLeft = 360;
-      jumpCount--;
-    }
-    else if (jumpCount == 2) {
-      velocity.y = - 5;
-      jumpCount--;
-    }
-  
-  }
-  
   //void jump() {
-  //  if (jumpCount == 2 || onGround || ((jumpCount == 1) && (!onGround) && (abs(velocity.x) < 5))) {
-  //    velocity.y = - 5;
-  //    jumpCount--;
-  //  }
-  //  else if ((jumpCount == 1) && !onGround && (abs(velocity.x) > 5)) {
+  //  if ((jumpCount == 1) && (!onGround && abs(velocity.x) > 5)) {
   //    velocity.y = -10;
   //    degreesLeft = 360;
   //    jumpCount--;
   //  }
+  //  else if (jumpCount == 2) {
+  //    velocity.y = - 5;
+  //    jumpCount--;
+  //  }
   
   //}
+  
+  void jump() {
+    if (jumpCount == 2 || onGround || ((jumpCount == 1) && (!onGround) && (abs(velocity.x) < 5))) {
+      velocity.y = - 5;
+      jumpCount--;
+    }
+    else if ((jumpCount == 1) && !onGround && (abs(velocity.x) > 5)) {
+      velocity.y = -10;
+      degreesLeft = 360;
+      jumpCount--;
+    }
+  
+  }
   
   
   
