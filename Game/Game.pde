@@ -24,6 +24,7 @@ void setup() {
   gravity = new PVector(0, 4); //gravity. we should prob do it here bc both ball + car experience gravity
 }
 
+
 void draw() {
   if (!gameStarted && !credits && !settings) {
     image(background, 0, 0, width, height); 
@@ -79,6 +80,8 @@ void mousePressed() {
 void keyPressed() {
   if (keyCode < keys.length) {
     keys[keyCode] = true;
+    car1.keyPressed();
+    car2.keyPressed();
   }
 }
 
