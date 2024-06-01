@@ -14,6 +14,7 @@ public class Car {
   int fuel;
   String[] arr = {" "};
   int mode; // left or right keys
+  int fuelRefillCooldown; // to make refill boost a little slower
   
   //flip vars
   int degreesLeft = 0; 
@@ -33,6 +34,7 @@ public class Car {
     turning = false;
     jumpCount = 2;
     fuel = 100;
+    fuelRefillCooldown = 0;
   }
   
   //have to continue working with angles
@@ -213,8 +215,6 @@ public class Car {
   
   }
   
-  
-  
   void useBoost(){
    if (fuel > 0 && !turning) {
     float boostAngle = angle;
@@ -231,16 +231,17 @@ public class Car {
   }
   }
   
-  // 1. if your upside down boost goes correct way but the car turns opposite way
-  // 2. if you boost while flip bad things happen so shld we make it so if ur turning u cant boost
-  
   void refuel(){
-    if (onGround || onRightWall || onLeftWall || onRoof){
-      if (fuel < 100){
-        fuel += 1;
-      }
-      if (fuel > 100){
-        fuel = 100;
+    if (onGround || onRightWall || onLeftWall || onRoof) {
+      fuelRefillCooldown++;
+      if (fuelRefillCooldown >= 3) { // Adjust the number for slower refuel rate (higher is slower btw)
+        if (fuel < 75) {
+          fuel += 1;
+        }
+        if (fuel > 75) {
+          fuel = 75;
+        }
+        fuelRefillCooldown = 0;
       }
     }
   }
@@ -259,21 +260,21 @@ public class Car {
   }
   
   void displayFuelBar() {
-    if (fuel < 100) {
-      float barWidth = 80;
-      float barHeight = 10;
-      float x = position.x - barWidth / 2; // Adjust x to be the left edge of the bar
-      float y = position.y - carImage.height * 0.3 / 2 - 45;
-      float fuelRatio = fuel / 100.0;
-      int red = (int) map(fuelRatio, 0, 1, 255, 0);
-      int green = (int) map(fuelRatio, 0, 1, 0, 255);
-      noStroke();
-      fill(255, 0, 0); // Background color (red)
-      rect(x, y, barWidth, barHeight);
-      fill(red, green, 0); // Foreground color (gradient from red to green)
-      rect(x, y, barWidth * fuelRatio, barHeight); // Maybe fix so doesn't start in center
+  if (fuel < 75) {
+    float barWidth = 80;
+    float barHeight = 10;
+    float x = position.x - barWidth / 2; // Adjust x to be the left edge of the bar
+    float y = position.y - carImage.height * 0.3 / 2 - 45;
+    float fuelRatio = fuel / 75.0;
+    int red = (int) map(fuelRatio, 0, 1, 255, 0);
+    int green = (int) map(fuelRatio, 0, 1, 0, 255);
+    noStroke();
+    fill(255, 0, 0); // Background color (red)
+    rect(x, y, barWidth, barHeight);
+    fill(red, green, 0); // Foreground color (gradient from red to green)
+    rect(x, y, barWidth * fuelRatio, barHeight);
   }
-  }
+}
   
    boolean intersects(Ball ball) {
     float distance = dist(position.x, position.y, ball.location.x, ball.location.y);
