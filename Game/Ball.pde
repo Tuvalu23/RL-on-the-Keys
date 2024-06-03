@@ -60,7 +60,7 @@ public class Ball {
         pg.ellipse(size / 2, size / 2, size - i * 2, size - i * 2);
       }
       pg.endDraw();
-      image(pg, location.x - size / 2, location.y - size / 2);
+      image(pg, location.x /*- size / 2*/, location.y /*- size / 2*/);
     } else {
       fill(100, 100, 100); // Gray color
       ellipse(location.x, location.y, size, size);
