@@ -14,6 +14,7 @@ public class Car {
   int fuel;
   String[] arr = {" "};
   int mode; // left or right keys
+  int fuelRefillCooldown; // to make refill boost a little slower
   
   //flip vars
   int degreesLeft = 0; 
@@ -33,6 +34,7 @@ public class Car {
     turning = false;
     jumpCount = 2;
     fuel = 100;
+    fuelRefillCooldown = 0;
   }
   
   //have to continue working with angles
@@ -118,7 +120,7 @@ public class Car {
       //if (keys[ENTER]) {
       //  jump();
       //}
-      if (keys[']']){
+      if (keys[CONTROL]){
         useBoost();
       }
       }
@@ -155,17 +157,17 @@ public class Car {
     }
    
     
-    position.x = constrain(position.x, carImage.width * 0.35 / 2 + 94, width - carImage.width * 0.35 / 2 - 88); // constrain x pos
-    position.y = constrain(position.y, carImage.height * 0.35 / 2 + 95, height - carImage.height * 0.35 / 2 - 100); // constrain y pos
+    position.x = constrain(position.x, carImage.width * 0.3 / 2 + 94, width - carImage.width * 0.3 / 2 - 88); // constrain x pos
+    position.y = constrain(position.y, carImage.height * 0.3 / 2 + 95, height - carImage.height * 0.3 / 2 - 100); // constrain y pos
     
-    if (position.y >= height - carImage.height * 0.35 / 2 - 100) {
+    if (position.y >= height - carImage.height * 0.3 / 2 - 100) {
       onGround = true;
       onRoof = false;
       onLeftWall = false;
       onRightWall = false;
       angle = 0; // Set angle to 0 degrees when on the ground
       jumpCount = 2; // Reset jump count when on the ground
-    } else if (position.y <= carImage.height * 0.35 / 2 + 95) {
+    } else if (position.y <= carImage.height * 0.3 / 2 + 95) {
       onGround = false;
       onRoof = true;
       onLeftWall = false;
@@ -178,14 +180,14 @@ public class Car {
         facingOtherSide = true;
       }
       jumpCount = 2; // Reset jump count when on the ceiling
-    } else if (position.x <= carImage.width * 0.35 / 2 + 94) {
+    } else if (position.x <= carImage.width * 0.3 / 2 + 94) {
       onGround = false;
       onRoof = false;
       onLeftWall = true;
       onRightWall = false;
       angle = -PI / 2; // Set angle to 90 degrees when on the left wall
       jumpCount = 2; // Reset jump count when on the left wall
-    } else if (position.x >= width - carImage.width * 0.35 / 2 - 108) {
+    } else if (position.x >= width - carImage.width * 0.3 / 2 - 108) {
       onGround = false;
       onRoof = false;
       onLeftWall = false;
@@ -200,19 +202,6 @@ public class Car {
     }
   }
   
-  //void jump() {
-  //  if ((jumpCount == 1) && (!onGround && abs(velocity.x) > 5)) {
-  //    velocity.y = -10;
-  //    degreesLeft = 360;
-  //    jumpCount--;
-  //  }
-  //  else if (jumpCount == 2) {
-  //    velocity.y = - 5;
-  //    jumpCount--;
-  //  }
-  
-  //}
-  
   void jump() {
     if (jumpCount == 2 || onGround || ((jumpCount == 1) && (!onGround) && (abs(velocity.x) < 5))) {
       velocity.y = - 5;
@@ -226,14 +215,12 @@ public class Car {
   
   }
   
-  
-  
   void useBoost(){
    if (fuel > 0 && !turning) {
     float boostAngle = angle;
-    //if ((facingOtherSide && angle == PI) || (!facingOtherSide && angle == 0)) {
-    //  boostAngle -= PI;
-    //}
+    if ((facingOtherSide && angle == PI) || (!facingOtherSide && angle == 0)) {
+      boostAngle -= PI;
+    }
     if (!facingOtherSide) {
       boostAngle -= PI; // Adjust the angle by 180 degrees if the car is facing the other side
       boostAngle *= -1;
@@ -244,16 +231,17 @@ public class Car {
   }
   }
   
-  // 1. if your upside down boost goes correct way but the car turns opposite way
-  // 2. if you boost while flip bad things happen so shld we make it so if ur turning u cant boost
-  
   void refuel(){
-    if (onGround || onRightWall || onLeftWall || onRoof){
-      if (fuel < 100){
-        fuel += 1;
-      }
-      if (fuel > 100){
-        fuel = 100;
+    if (onGround || onRightWall || onLeftWall || onRoof) {
+      fuelRefillCooldown++;
+      if (fuelRefillCooldown >= 3) { // Adjust the number for slower refuel rate (higher is slower btw)
+        if (fuel < 75) {
+          fuel += 1;
+        }
+        if (fuel > 75) {
+          fuel = 75;
+        }
+        fuelRefillCooldown = 0;
       }
     }
   }
@@ -266,31 +254,31 @@ public class Car {
     }
     rotate(angle);
     imageMode(CENTER);
-    image(carImage, 0, 0, carImage.width * 0.35, carImage.height * 0.35);
+    image(carImage, 0, 0, carImage.width * 0.3, carImage.height * 0.3);
     popMatrix();
     displayFuelBar();
   }
   
   void displayFuelBar() {
-    if (fuel < 100) {
-      float barWidth = 80;
-      float barHeight = 10;
-      float x = position.x - barWidth / 2; // Adjust x to be the left edge of the bar
-      float y = position.y - carImage.height * 0.35 / 2 - 45;
-      float fuelRatio = fuel / 100.0;
-      int red = (int) map(fuelRatio, 0, 1, 255, 0);
-      int green = (int) map(fuelRatio, 0, 1, 0, 255);
-      noStroke();
-      fill(255, 0, 0); // Background color (red)
-      rect(x, y, barWidth, barHeight);
-      fill(red, green, 0); // Foreground color (gradient from red to green)
-      rect(x, y, barWidth * fuelRatio, barHeight); // Maybe fix so doesn't start in center
+  if (fuel < 75) {
+    float barWidth = 80;
+    float barHeight = 10;
+    float x = position.x - barWidth / 2; // Adjust x to be the left edge of the bar
+    float y = position.y - carImage.height * 0.3 / 2 - 45;
+    float fuelRatio = fuel / 75.0;
+    int red = (int) map(fuelRatio, 0, 1, 255, 0);
+    int green = (int) map(fuelRatio, 0, 1, 0, 255);
+    noStroke();
+    fill(255, 0, 0); // Background color (red)
+    rect(x, y, barWidth, barHeight);
+    fill(red, green, 0); // Foreground color (gradient from red to green)
+    rect(x, y, barWidth * fuelRatio, barHeight);
   }
-  }
+}
   
    boolean intersects(Ball ball) {
     float distance = dist(position.x, position.y, ball.location.x, ball.location.y);
-    return distance < (carImage.width * 0.35 / 2 + ball.size / 2) - 30 || distance < (carImage.height * 0.35 / 2 + ball.size / 2) - 60;
+    return distance < (carImage.width * 0.3 / 2 + ball.size / 2) - 30 || distance < (carImage.height * 0.3 / 2 + ball.size / 2) - 60;
   }
   
 }
