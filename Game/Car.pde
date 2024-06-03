@@ -120,7 +120,7 @@ public class Car {
       //if (keys[ENTER]) {
       //  jump();
       //}
-      if (keys[CONTROL]){
+      if (keys[']']){
         useBoost();
       }
       }
