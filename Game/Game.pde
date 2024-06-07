@@ -53,7 +53,6 @@ void draw() {
   else {
     background(255);
     drawField();
-    scoreboard();
     if (countdownActive) {
       ball.velocity.set(0, 0);
       car1.velocity.set(0, 0);
@@ -311,24 +310,4 @@ void displayCountdown() {
   float colorInterpolation = map(countdownVal, 3, 1, 0, 1);
   fill(lerpColor(color(255, 0, 0), color(0, 255, 0), colorInterpolation)); // Interpolate from red to green
   text(countdownVal, width / 2, height / 2);
-}
-
-void scoreboard() {
-  strokeWeight(10);
-  fill(30, 144, 255);
-  rect(0, 0, width, 130);
-  fill(255, 140, 0);
-  rect(width, 0, width, 130);
-  
-  fill(0);
-  textFont(font);
-  textAlign(width/2 - 50, 75);
-  textSize(60);
-  text(score1, width/2 - 50, 75);
-  
-  textFont(font);
-  textAlign(width/2 + 50, 75);
-  textSize(60);
-  text(score2, width/2 + 50, 75);
-  
 }
