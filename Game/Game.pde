@@ -311,3 +311,4 @@ void displayCountdown() {
   fill(lerpColor(color(255, 0, 0), color(0, 255, 0), colorInterpolation)); // Interpolate from red to green
   text(countdownVal, width / 2, height / 2);
 }
+//testing branch work (delete later)
