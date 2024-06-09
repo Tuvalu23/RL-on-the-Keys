@@ -219,7 +219,7 @@ public class Car {
    if (fuel > 0 && !turning) {
     float boostAngle = angle;
     if ((facingOtherSide && angle == PI) || (!facingOtherSide && angle == 0)) {
-      boostAngle -= PI;
+      boostAngle +=  2*PI;
     }
     if (!facingOtherSide) {
       boostAngle -= PI; // Adjust the angle by 180 degrees if the car is facing the other side
@@ -278,7 +278,8 @@ public class Car {
   
    boolean intersects(Ball ball) {
     float distance = dist(position.x, position.y, ball.location.x, ball.location.y);
-    return distance < (carImage.width * 0.3 / 2 + ball.size / 2) - 30 || distance < (carImage.height * 0.3 / 2 + ball.size / 2) - 60;
+    //return distance < 0.2; 
+    return distance < (carImage.width * 0.3 / 2 + ball.size / 2) - 29 || distance < (carImage.height * 0.3 / 2 + ball.size / 2) - 59;
   }
   
 }

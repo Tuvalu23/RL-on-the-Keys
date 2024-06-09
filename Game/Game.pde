@@ -232,6 +232,26 @@ void drawField() {
   car1.display();
   car2.display();
   ball.display();
+  displayScoreboard();
+}
+
+void displayScoreboard() {
+  textFont(font);
+  textAlign(CENTER, CENTER);
+  textSize(50);
+  
+  fill(0, 0, 255);
+  rectMode(CENTER);
+  rect(width/4, 50, 100, 60);
+  
+  fill(255, 140, 0);
+  rect(width*3/4, 50, 100, 60);
+  
+  fill(255);
+  text(score1, width/4, 50);
+  
+  fill(255);
+  text(score2, width*3/4, 50);
 }
 
 void startGame() {
@@ -311,3 +331,4 @@ void displayCountdown() {
   fill(lerpColor(color(255, 0, 0), color(0, 255, 0), colorInterpolation)); // Interpolate from red to green
   text(countdownVal, width / 2, height / 2);
 }
+//testing branch work (delete later)
