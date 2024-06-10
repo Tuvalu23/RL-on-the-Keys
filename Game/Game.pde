@@ -1,10 +1,10 @@
 boolean gameStarted = false;
 boolean credits = false;
 boolean settings = false;
-boolean isBall3D = true;
+boolean isBall3D = true; 
 Car car1, car2;
 Ball ball;
-int score1, score2;
+int score1, score2; 
 PImage background, car1Image, car2Image, gameField;
 PFont font;
 PVector gravity;
@@ -34,20 +34,20 @@ void setup() {
   size(1600, 900, P3D);
   font = createFont("Bauhaus 93", 24);
   background = loadImage("background.jpg");
-  car1Image = loadImage("bluecar.png");
-  car2Image = loadImage("orangecar.png");
+  car1Image = loadImage("bluecar.png"); 
+  car2Image = loadImage("orangecar.png"); 
   gameField = loadImage("rlfield.jpg");
   car1 = new Car(car1Image, width / 4, height - 100, 1); // player 1
   car2 = new Car(car2Image, width * 3 / 4, height - 100, 2); // player 2
-  ball = new Ball(width / 2, height - 300);
- 
+  ball = new Ball(width / 2, height * 2 /3 );
+  
   gravity = new PVector(0, 4); // Gravity
   countdownTimer = millis();
 }
 
 void draw() {
   if (!gameStarted && !credits && !settings) {
-    image(background, 0, 0, width, height);
+    image(background, 0, 0, width, height); 
     displayOpeningScreen();
   }
   else if (credits) {
@@ -83,16 +83,20 @@ void draw() {
             inOvertime = true;
             resetBall();
           } else {
-            displayCelebration();
+            timerFinished = true;
           }
         }
       } else {
         displayOvertime();
       }
     } else if (timerFinished) {
-      displayCelebration();
+      if (ball.location.y >= height - ball.size / 2 - 100) { // Check if the ball is on the ground
+        displayCelebration();
+      } else {
+        update();
+      }
     }
-   
+    
     if (goalScored) {
       displayGoalMessage();
       goalMessageX += 5;
@@ -106,19 +110,19 @@ void draw() {
 void mousePressed() {
   if (!gameStarted && !credits && !settings) {
     // checks if play button is pressed
-    if (mouseX > width / 2 - 200 && mouseX < width / 2 + 200 && mouseY > height / 2 - 100 && mouseY < height / 2 - 50) {
+    if (mouseX > width / 2 - 200 && mouseX < width / 2 + 200 && mouseY > height / 2 - 100 && mouseY < height / 2 - 50) { 
       startGame();
     }
     // checks if credits is pressed
-    else if (mouseX > width / 2 - 200 && mouseX < width / 2 + 200 && mouseY > height / 2 - 25 && mouseY < height / 2 + 25) {
+    else if (mouseX > width / 2 - 200 && mouseX < width / 2 + 200 && mouseY > height / 2 - 25 && mouseY < height / 2 + 25) { 
       credits = true;
     }
     // check if settings is pressed
-    else if (mouseX > width / 2 - 200 && mouseX < width / 2 + 200 && mouseY > height / 2 + 50 && mouseY < height / 2 + 100) {
+    else if (mouseX > width / 2 - 200 && mouseX < width / 2 + 200 && mouseY > height / 2 + 50 && mouseY < height / 2 + 100) { 
       settings = true;
     }
     // check if exit is pressed
-    else if (mouseX > width / 2 - 200 && mouseX < width / 2 + 200 && mouseY > height / 2 + 125 && mouseY < height / 2 + 175) {
+    else if (mouseX > width / 2 - 200 && mouseX < width / 2 + 200 && mouseY > height / 2 + 125 && mouseY < height / 2 + 175) { 
       exit(); // quit
     }
   } else if (credits) {
@@ -186,7 +190,7 @@ void displayOpeningScreen() {
   textSize(70);
   fill(0); // black
   text("ON THE KEYS", width / 2, height / 4 + 50);
- 
+  
   // play button
   fill(150); // Gray color
   rectMode(CENTER);
@@ -194,7 +198,7 @@ void displayOpeningScreen() {
   fill(255);
   textSize(40);
   text("PLAY", width / 2, height / 2 - 70);
- 
+  
   // credits button
   fill(150); // Gray color
   rectMode(CENTER);
@@ -202,7 +206,7 @@ void displayOpeningScreen() {
   fill(255);
   textSize(40);
   text("CREDITS", width / 2, height / 2 + 5);
- 
+  
   // settings button
   fill(150); // Gray color
   rectMode(CENTER);
@@ -210,7 +214,7 @@ void displayOpeningScreen() {
   fill(255);
   textSize(40);
   text("SETTINGS", width / 2, height / 2 + 80);
- 
+  
   // exit button
   fill(150); // Gray color
   rectMode(CENTER);
@@ -227,7 +231,7 @@ void displaySettingsScreen() {
   fill(255);
   textSize(50);
   text("SETTINGS", width / 2, height / 4);
- 
+  
   // Toggle Ball 3D/2D button
   fill(150);
   rectMode(CENTER);
@@ -235,7 +239,7 @@ void displaySettingsScreen() {
   fill(255);
   textSize(30);
   text(isBall3D ? "Ball Mode: 3D" : "Ball Mode: 2D", width / 2, height / 2 - 50);
- 
+  
   // Back button
   fill(150);
   rectMode(CENTER);
@@ -248,7 +252,7 @@ void displaySettingsScreen() {
 void drawField() {
   camera(width / 2, height / 2, 800, width / 2, height / 2, 0, 0, 1, 0);
   image(gameField, width / 2, height / 2, width, height);
- 
+  
   // Display cars and ball
   car1.display();
   car2.display();
@@ -263,28 +267,28 @@ void displayScoreboard() {
   textFont(font);
   textAlign(CENTER, CENTER);
   textSize(50);
- 
+  
   // Blue side background
   fill(0, 0, 255);
   rectMode(CENTER);
   rect(width / 4, 50, 100, 60);
- 
+  
   // Orange side background
   fill(255, 140, 0);
   rect(3 * width / 4, 50, 100, 60);
- 
+  
   // Timer background (connecting the two rectangles)
   fill(150);
   rect(width / 2, 50, 200, 60);
- 
+  
   // Blue side score
   fill(255);
   text(score1, width / 4, 50);
- 
+  
   // Orange side score
   fill(255);
   text(score2, 3 * width / 4, 50);
- 
+  
   // Display the timer within the central rectangle or "OVERTIME"
   if (inOvertime) {
     displayOvertime();
@@ -297,7 +301,7 @@ void displayTimer() {
   textFont(font);
   textAlign(CENTER, CENTER);
   textSize(50);
- 
+  
   if (!countdownActive) {
     int elapsed = gameActive ? millis() - gameStartTime : pausedTime;
     int remainingTime = gameDuration - elapsed;
@@ -340,22 +344,22 @@ void update() {
   car1.update();
   car2.update();
   ball.update();
- 
+  
   ball.checkCollision(car1);
   ball.checkCollision(car2);
 
   car1.display();
   car2.display();
   ball.display();
- 
+  
   checkGoal(); // has there been a goal
 }
 
 void checkGoal() {
   // Check if the ball has hit the left goal area
-  if (ball.location.x - ball.size / 2 <= width / 12.5 &&
-      ball.location.y >= height * 0.375 - 40 &&
-      ball.location.y <= height * 2 / 3 + 40) {
+  if (ball.location.x - ball.size / 2 <= width / 12.5 && 
+      ball.location.y >= height * 0.375 && 
+      ball.location.y <= height * 2 / 3) {
     score2++;
     goalScored("Team 2");
     if (inOvertime) {
@@ -365,9 +369,9 @@ void checkGoal() {
     }
   }
   // Check if the ball has hit the right goal area
-  else if (ball.location.x + ball.size / 2 >= width * 0.925 &&
-           ball.location.y >= height * 0.375 - 40 &&
-           ball.location.y <= height * 2 / 3 + 40) {
+  else if (ball.location.x + ball.size / 2 >= width * 0.925 && 
+           ball.location.y >= height * 0.375 && 
+           ball.location.y <= height * 2 / 3) {
     score1++;
     goalScored("Team 1");
     if (inOvertime) {
@@ -394,7 +398,7 @@ void displayGoalMessage() {
 }
 
 void resetBall() {
-  ball.location.set(width / 2, height - 300);
+  ball.location.set(width / 2, height * 2 /3);
   ball.velocity.set(0, 0);
   car1.position.set(width / 4, height - 100);
   car2.position.set(width * 3 / 4, height - 100);
@@ -434,7 +438,7 @@ void displayCelebration() {
   text(score1, width / 2 - 100, height / 2 + 150);
   fill(255, 140, 0);
   text(score2, width / 2 + 100, height / 2 + 150);
- 
+  
   // Determine winner and display message
   if (score1 > score2) {
     fill(0, 0, 255);
@@ -443,7 +447,7 @@ void displayCelebration() {
     fill(255, 140, 0);
     text("Team 2 Wins!", width / 2, height / 2 + 250);
   }
- 
+  
   // Exit button
   fill(150);
   rectMode(CENTER);

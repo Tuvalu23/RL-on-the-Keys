@@ -219,9 +219,9 @@ public class Car {
    if (fuel > 0 && !turning) {
     float boostAngle = angle;
     if ((facingOtherSide && angle == PI) || (!facingOtherSide && angle == 0)) {
-      boostAngle +=  2*PI;
+      boostAngle -= PI;
     }
-    if (!facingOtherSide) {
+    if (!facingOtherSide && position.y < height - carImage.height * 0.3 / 2 - 100) {
       boostAngle -= PI; // Adjust the angle by 180 degrees if the car is facing the other side
       boostAngle *= -1;
     }
