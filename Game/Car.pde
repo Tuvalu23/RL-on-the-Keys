@@ -219,12 +219,15 @@ public class Car {
    if (fuel > 0 && !turning) {
     float boostAngle = angle;
     if ((facingOtherSide && angle == PI) || (!facingOtherSide && angle == 0)) {
+      if (position.y >= height - carImage.height * 0.3 / 2 - 100) {
       boostAngle -= PI;
+      }
     }
     if (!facingOtherSide && position.y < height - carImage.height * 0.3 / 2 - 100) {
       boostAngle -= PI; // Adjust the angle by 180 degrees if the car is facing the other side
       boostAngle *= -1;
     }
+    
     PVector boost = PVector.fromAngle(boostAngle).mult(1.5); // Adjust the multiplier for desired boost strength
     acceleration.add(boost);
     fuel -= 1;
