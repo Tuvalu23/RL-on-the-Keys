@@ -61,6 +61,8 @@ void draw() {
     drawField();
     if (countdownActive) {
       car1.facingOtherSide = true;
+      car1.fuel = 75;
+      car2.fuel = 75;
       displayCountdown();
       if (millis() - countdownTimer > 1000) {
         countdownVal--;
