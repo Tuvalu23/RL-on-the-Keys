@@ -69,19 +69,19 @@ public class Ball {
  
  void checkCollision(Car car) {
     if (car.intersects(this)) {
-      velocity.x *= -1;
-      velocity.y *= -1;
-      //PVector normal = PVector.sub(location, car.position);
-      //normal.normalize();
+      //velocity.x *= -1;
+      //velocity.y *= -1;
+      PVector normal = PVector.sub(location, car.position);
+      normal.normalize();
       //float dotProduct = velocity.dot(normal);
-      ////PVector reflection = PVector.sub(velocity, PVector.mult(normal, 2 * dotProduct));
-      ////velocity.set(reflection);
+      //PVector reflection = PVector.sub(velocity, PVector.mult(normal, 2 * dotProduct));
+      //velocity.set(reflection);
 
-      ////PVector carForce = car.velocity.copy().mult(car.velocity.mag() * 0.5f); // Adjust force transfer
-      ////applyForce(carForce);
+      //PVector carForce = car.velocity.copy().mult(car.velocity.mag() * 0.5f); // Adjust force transfer
+      //applyForce(carForce);
 
-      //location.add(PVector.mult(normal, size / 2)); // move the ball outside the car to avoid sticking
-      velocity = PVector.mult(car.velocity,2);
+      location.add(PVector.mult(normal, size / 2)); // move the ball outside the car to avoid sticking
+      velocity = PVector.mult(car.velocity,1.25);
     }
  }
   

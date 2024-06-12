@@ -282,7 +282,7 @@ public class Car {
    boolean intersects(Ball ball) {
     float distance = dist(position.x, position.y, ball.location.x, ball.location.y);
     //return distance < 0.2; 
-    return distance < (carImage.width * 0.3 / 2 + ball.size / 2) - 29 || distance < (carImage.height * 0.3 / 2 + ball.size / 2) - 59;
+    return distance < (carImage.width * 0.3 / 2 + ball.size / 2) - 30 || distance < (carImage.height * 0.3 / 2 + ball.size / 2) - 60;
   }
   
 }
