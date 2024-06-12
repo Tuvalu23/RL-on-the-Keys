@@ -61,8 +61,6 @@ void draw() {
     drawField();
     if (countdownActive) {
       car1.facingOtherSide = true;
-      car1.fuel = 75;
-      car2.fuel = 75;
       displayCountdown();
       if (millis() - countdownTimer > 1000) {
         countdownVal--;
@@ -92,11 +90,7 @@ void draw() {
         displayOvertime();
       }
     } else if (timerFinished) {
-      if (ball.location.y >= height - ball.size / 2 - 100) { // Check if the ball is on the ground
-        displayCelebration();
-      } else {
-        update();
-      }
+      displayCelebration();
     }
     
     if (goalScored) {
@@ -143,7 +137,7 @@ void mousePressed() {
     }
   } else if (timerFinished) {
     // Check if exit button in celebration screen is pressed
-    if (mouseX > width / 2 - 100 && mouseX < width / 2 + 100 && mouseY > height / 2 + 320 && mouseY < height / 2 + 380) {
+    if (mouseX > width / 2 - 100 && mouseX < width / 2 + 100 && mouseY > height / 2 + 450 && mouseY < height / 2 + 510) {
       exit(); // quit
     }
   }
@@ -357,33 +351,6 @@ void update() {
   checkGoal(); // has there been a goal
 }
 
-void checkGoal() {
-  // Check if the ball has hit the left goal area
-  if (ball.location.x - ball.size / 2 <= width / 12.5 && 
-      ball.location.y >= height * 0.375 && 
-      ball.location.y <= height * 2 / 3) {
-    score2++;
-    goalScored("Team 2");
-    if (inOvertime) {
-      endGame("Team 2");
-    } else {
-      resetBall();
-    }
-  }
-  // Check if the ball has hit the right goal area
-  else if (ball.location.x + ball.size / 2 >= width * 0.925 && 
-           ball.location.y >= height * 0.375 && 
-           ball.location.y <= height * 2 / 3) {
-    score1++;
-    goalScored("Team 1");
-    if (inOvertime) {
-      endGame("Team 1");
-    } else {
-      resetBall();
-    }
-  }
-}
-
 void goalScored(String team) {
   goalScored = true;
   goalMessage = "GOAL! " + team;
@@ -426,6 +393,42 @@ void displayCountdown() {
   text(countdownVal, width / 2, height / 2);
 }
 
+void checkGoal() {
+  // Check if the ball has hit the left goal area
+  if (ball.location.x - ball.size / 2 <= width / 12.5 && 
+      ball.location.y >= height * 0.375 && 
+      ball.location.y <= height * 2 / 3) {
+    score2++;
+    goalScored("Team 2");
+    if (inOvertime) {
+      endGame("Team 2");
+    } else {
+      resetBall();
+    }
+  }
+  // Check if the ball has hit the right goal area
+  else if (ball.location.x + ball.size / 2 >= width * 0.925 && 
+           ball.location.y >= height * 0.375 && 
+           ball.location.y <= height * 2 / 3) {
+    score1++;
+    goalScored("Team 1");
+    if (inOvertime) {
+      endGame("Team 1");
+    } else {
+      resetBall();
+    }
+  }
+}
+
+void endGame(String winningTeam) {
+  gameActive = false;
+  timerFinished = true;
+  inOvertime = false;
+  goalScored = false;
+  goalMessage = ""; // Clear the goal message
+  displayCelebration();
+}
+
 void displayCelebration() {
   background(0);
   textFont(font);
@@ -448,21 +451,16 @@ void displayCelebration() {
   } else if (score2 > score1) {
     fill(255, 140, 0);
     text("Team 2 Wins!", width / 2, height / 2 + 250);
+  } else {
+    fill(255);
+    text("It's a tie!", width / 2, height / 2 + 250);
   }
-  
+
   // Exit button
   fill(150);
   rectMode(CENTER);
-  rect(width / 2, height / 2 + 350, 200, 60, 10);
+  rect(width / 2, height / 2 + 450, 200, 60, 10);
   fill(255);
   textSize(30);
-  text("EXIT", width / 2, height / 2 + 350);
-}
-
-void endGame(String winningTeam) {
-  gameActive = false;
-  timerFinished = true;
-  goalMessage = "";
-  goalMessageX = width / 2;
-  goalMessageColor = winningTeam.equals("Team 2") ? color(255, 140, 0) : color(0, 0, 255);
+  text("EXIT", width / 2, height / 2 + 450);
 }
