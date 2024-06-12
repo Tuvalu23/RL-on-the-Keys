@@ -369,6 +369,8 @@ void displayGoalMessage() {
 void resetBall() {
   ball.location.set(width / 2, height * 2 /3);
   ball.velocity.set(0, 0);
+  car1.fuel = 75; 
+  car2.fuel = 75;
   car1.position.set(width / 4, height - 100);
   car2.position.set(width * 3 / 4, height - 100);
   car1.velocity.set(0, 0);
